@@ -40,5 +40,9 @@ pip install pytest-cov
 ```
 pytest --cov=src tests/
 ```
-
+или для открытия отчета в браузере
+```
+pytest --cov=src --cov-report=html tests/
+```
 5. Результаты тестирования содержаться в папке `htmlcov/`)
+После выполнения откройте htmlcov/index.html в браузере.
