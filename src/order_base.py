@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from src.product import Product
+
 
 class OrderBase(ABC):
     """Абстрактный класс для общих свойств заказа и категории."""
