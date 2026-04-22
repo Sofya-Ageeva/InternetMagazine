@@ -1,7 +1,7 @@
 import pytest
-
 from src.category import Category
 from src.product import Product
+
 
 @pytest.fixture(autouse=True)
 def reset_category_counters():
@@ -61,6 +61,7 @@ def test_add_product(category_with_products):
     assert new_product in products_list
     assert Category.product_count == 3  # было 2, стало 3
 
+
 def test_products_getter_format(category_with_products):
     """Проверяет формат вывода геттера products."""
     output = category_with_products.products
@@ -72,12 +73,14 @@ def test_products_getter_format(category_with_products):
         assert line.endswith('шт.')
         assert 'руб.' in line
 
+
 def test_product_count_increment(category_with_products):
     """Проверяет увеличение счётчика продуктов при добавлении."""
     initial_count = Category.product_count
     new_product = Product("Мышь", "Беспроводная", 2000.0, 15)
     category_with_products.add_product(new_product)
     assert Category.product_count == initial_count + 1
+
 
 def test_private_products_attribute(category_with_products):
     """Проверяет, что атрибут products приватный."""

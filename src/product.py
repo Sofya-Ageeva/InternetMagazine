@@ -22,18 +22,8 @@ class Product:
         """Сеттер для цены с проверкой."""
         if value <= 0:
             print("Цена не должна быть нулевая или отрицательная")
-        else:
-            # Дополнительное задание: запрос подтверждения при понижении цены
-            if value < self.__price:
-                confirmation = input(
-                    f"Цена понижается с {self.__price} до {value}. Подтвердить? (y/n): "
-                )
-                if confirmation.lower() == 'y':
-                    self.__price = value
-                else:
-                    print("Изменение цены отменено")
-            else:
-                self.__price = value
+            return
+        self.__price = value
 
     @classmethod
     def new_product(cls, product_data: dict, product_list: list = None) -> 'Product':
@@ -47,7 +37,7 @@ class Product:
                 if existing_product.name == product_data['name']:
                     # Складываем количество
                     existing_product.quantity += product_data['quantity']
-                    # Берём максимальную цену
+            # Берём максимальную цену
             if product_data['price'] > existing_product.__price:
                 existing_product.__price = product_data['price']
             return existing_product
@@ -59,3 +49,16 @@ class Product:
             price=product_data['price'],
             quantity=product_data['quantity']
         )
+
+    def __str__(self) -> str:
+        """Строковое представление продукта."""
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: 'Product') -> float:
+        """
+        Магический метод сложения.
+        Возвращает сумму произведений цены на количество у двух объектов.
+        """
+        if not isinstance(other, Product):
+            return NotImplemented
+        return self.__price * self.quantity + other.__price * other.quantity
