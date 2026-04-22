@@ -1,16 +1,14 @@
+from src.base_product import BaseProduct
 
-
-class Product:
+class Product(BaseProduct):
     name = str
     description = str
     price = float
     quantity = int
 
     def __init__(self, name, description, price, quantity):
-        self.name = name
-        self.description = description
+        super().__init__(name, description, price, quantity)
         self.__price = price
-        self.quantity = quantity
 
     @property
     def price(self) -> float:
