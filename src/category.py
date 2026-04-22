@@ -20,20 +20,23 @@ class Category:
 
         # Автоматическое увеличение счётчиков
         Category.category_count += 1
-        Category.product_count += len(products)
+        if products:
+            Category.product_count += len(products)
 
     def add_product(self, product) -> None:
         """Добавляет продукт в категорию, если он является экземпляром Product или его наследником."""
         if not isinstance(product, Product):
             raise TypeError("Можно добавлять только объекты класса Product или его наследников")
-        self.products.append(product)
+        self.__products.append(product)
+        Category.product_count += 1
 
     @property
     def products(self) -> str:
         """Геттер для приватного атрибута __products."""
+
         result = []
         for product in self.__products:
-            result.append(f"{product}\n")
+            result.append(f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n")
         return ''.join(result)
 
     def get_products_list(self) -> List[Product]:

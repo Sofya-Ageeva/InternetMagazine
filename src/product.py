@@ -55,10 +55,7 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other: 'Product') -> float:
-        """
-        Магический метод сложения.
-        Возвращает сумму произведений цены на количество у двух объектов.
-        """
-        if type(self) != type(other):
+        """Возвращает сумму произведений цены на количество у двух объектов."""
+        if type(self) is not type(other) :
             raise TypeError(f"Нельзя сложить {type(self).__name__} с {type(other).__name__}")
         return self.__price * self.quantity + other.__price * other.quantity

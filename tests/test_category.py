@@ -1,6 +1,8 @@
 import pytest
 from src.category import Category
 from src.product import Product
+from src.smartphone import Smartphone
+from src.lawngrass import LawnGrass
 
 
 @pytest.fixture(autouse=True)
@@ -53,13 +55,12 @@ def test_empty_category():
 
 
 ##
-def test_add_product(category_with_products):
-    """Проверяет добавление продукта через метод add_product."""
-    new_product = Product("Наушники", "Беспроводные", 5000.0, 20)
-    category_with_products.add_product(new_product)
-    products_list = category_with_products.get_products_list()
-    assert new_product in products_list
-    assert Category.product_count == 3  # было 2, стало 3
+def test_add_product():
+    category = Category("Электроника", "Техника")
+    product = Product("Наушники", "Беспроводные", 5000, 15)
+    category.add_product(product)
+    assert len(category._Category__products) == 1
+    assert Category.product_count == 1  # было 2, стало 3
 
 
 def test_products_getter_format(category_with_products):
@@ -74,15 +75,40 @@ def test_products_getter_format(category_with_products):
         assert 'руб.' in line
 
 
-def test_product_count_increment(category_with_products):
-    """Проверяет увеличение счётчика продуктов при добавлении."""
-    initial_count = Category.product_count
-    new_product = Product("Мышь", "Беспроводная", 2000.0, 15)
-    category_with_products.add_product(new_product)
-    assert Category.product_count == initial_count + 1
+def test_product_count_increment():
+    category1 = Category("Смартфоны", "Мобильные устройства")
+    category2 = Category("Травы", "Газонная трава")
+
+    phone = Smartphone("iPhone", "Смартфон", 10000, 2, "высокая", "Pro", 128, "чёрный")
+    grass = LawnGrass("Трава", "Газонная", 1500, 10, "Россия", "14–21 день", "зелёный")
+
+    category1.add_product(phone)
+    category2.add_product(grass)
+
+    assert Category.product_count == 2
 
 
 def test_private_products_attribute(category_with_products):
     """Проверяет, что атрибут products приватный."""
     with pytest.raises(AttributeError):
         _ = category_with_products.__products
+
+
+def test_add_valid_product():
+    category = Category("Электроника", "Смартфоны и аксессуары")
+    product = Product("Наушники", "Беспроводные", 5000, 15)
+    category.add_product(product)
+    assert len(category._Category__products) == 1
+
+
+def test_add_smartphone_to_category():
+    category = Category("Смартфоны", "Мобильные устройства")
+    smartphone = Smartphone("iPhone", "Смартфон", 10000, 2, "высокая", "Pro", 128, "чёрный")
+    category.add_product(smartphone)
+    assert len(category._Category__products) == 1
+
+
+def test_add_invalid_object_to_category():
+    category = Category("Ошибки", "Тестовая категория")
+    with pytest.raises(TypeError, match="Можно добавлять только объекты класса Product"):
+        category.add_product("не продукт")

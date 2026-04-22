@@ -1,6 +1,8 @@
 import pytest
 
 from src.product import Product
+from src.smartphone import Smartphone
+from src.lawngrass import LawnGrass
 
 
 @pytest.fixture
@@ -126,3 +128,20 @@ def test_addition_same_product():
     result = product + product
     expected = 75 * 8 + 75 * 8  # 1200
     assert result == expected
+
+
+##
+def test_addition_same_class():
+    phone1 = Smartphone("iPhone", "Смартфон", 10000, 2, "высокая", "Pro", 128, "чёрный")
+    phone2 = Smartphone("Samsung", "Смартфон", 8000, 3, "средняя", "S23", 256, "белый")
+    result = phone1 + phone2
+    expected = 10000 * 2 + 8000 * 3  # 44000
+    assert result == expected
+
+
+def test_addition_different_classes():
+    phone = Smartphone("iPhone", "Смартфон", 10000, 2, "высокая", "Pro", 128, "чёрный")
+    grass = LawnGrass("Трава", "Газонная", 1500, 10, "Россия", "14–21 день", "зелёный")
+
+    with pytest.raises(TypeError, match="Нельзя сложить Smartphone с LawnGrass"):
+        phone + grass
