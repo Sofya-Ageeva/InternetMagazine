@@ -59,6 +59,6 @@ class Product:
         Магический метод сложения.
         Возвращает сумму произведений цены на количество у двух объектов.
         """
-        if not isinstance(other, Product):
-            return NotImplemented
+        if type(self) != type(other):
+            raise TypeError(f"Нельзя сложить {type(self).__name__} с {type(other).__name__}")
         return self.__price * self.quantity + other.__price * other.quantity
