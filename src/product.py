@@ -1,6 +1,7 @@
+from src.logging_mixin import LoggingMixin
 from src.base_product import BaseProduct
 
-class Product(BaseProduct):
+class Product(LoggingMixin, BaseProduct):
     name = str
     description = str
     price = float
