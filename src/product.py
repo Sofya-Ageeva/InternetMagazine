@@ -9,8 +9,13 @@ class Product(LoggingMixin, BaseProduct):
     quantity = int
 
     def __init__(self, name, description, price, quantity):
-        super().__init__(name, description, price, quantity)
+        self.name = name
+        self.description = description
+        self.price = price
+        self.quantity = quantity
         self.__price = price
+        super().__init__(name, description, price, quantity)
+
 
     @property
     def price(self) -> float:
@@ -32,14 +37,17 @@ class Product(LoggingMixin, BaseProduct):
         Если продукт с таким именем уже есть в product_list,
         объединяет количество и берёт максимальную цену.
         """
-        if product_list:
-            for existing_product in product_list:
-                if existing_product.name == product_data['name']:
-                    # Складываем количество
-                    existing_product.quantity += product_data['quantity']
-            # Берём максимальную цену
-            if product_data['price'] > existing_product.__price:
-                existing_product.__price = product_data['price']
+        if product_list is None:
+            product_list =[]
+        existing_product = None
+        for product in product_list:
+            if product.name == product_data['name']:
+                existing_product = product
+                break
+        if existing_product is not None:
+            existing_product.quantity += product_data['quantity']
+            if product_data['price'] > existing_product.price:
+                existing_product.price = product_data['price']
             return existing_product
 
         # Если дубликата нет, создаём новый продукт
