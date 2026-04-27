@@ -120,18 +120,18 @@ def test_add_invalid_object_to_category():
 
 def test_average_price_empty_category(empty_category):
     """Средний ценник в пустой категории равен 0."""
-    assert empty_category.average_price() == 0.0
+    assert empty_category.middle_price() == 0.0
 
 
 def test_average_price_with_products(category_with_products):
     """Расчёт среднего ценника для категории с товарами."""
     # (29 999,99 + 59 999,99) / 2 = 44 999,99
     expected = (29999.99 + 59999.99) / 2
-    assert category_with_products.average_price() == pytest.approx(expected, rel=1e-2)
+    assert category_with_products.middle_price() == pytest.approx(expected, rel=1e-2)
 
 
 def test_average_price_single_product():
     """Средний ценник для категории с одним товаром."""
     product = Product("Один товар", "Описание", 10000.0, 5)
     category = Category("Одиночный товар", "Один продукт", [product])
-    assert category.average_price() == 10000.0
+    assert category.middle_price() == 10000.0
