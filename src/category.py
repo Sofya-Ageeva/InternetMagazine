@@ -51,12 +51,12 @@ class Category:
         """Возвращает приватный список продуктов как обычный список для программной работы."""
         return self.__products
 
-    def average_price(self) -> float:
+    def middle_price(self) -> float:
         """Осуществляет подсчет средней цены всех товаров в категории."""
         try:
             total_price = sum(product.price for product in self.__products)
-            avg = total_price / len(self.__products)
-            return avg
+            middle = total_price / len(self.__products)
+            return middle
         except ZeroDivisionError:
             return 0.0
 

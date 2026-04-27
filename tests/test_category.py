@@ -119,7 +119,7 @@ def test_add_invalid_object_to_category():
 
 
 def test_average_price_empty_category(empty_category):
-    """Тест: средний ценник в пустой категории равен 0."""
+    """Средний ценник в пустой категории равен 0."""
     assert empty_category.average_price() == 0.0
 
 
