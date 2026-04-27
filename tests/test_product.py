@@ -1,5 +1,4 @@
 import pytest
-
 from src.product import Product
 from src.smartphone import Smartphone
 from src.lawngrass import LawnGrass
@@ -26,9 +25,10 @@ def test_product_types():
 
 
 def test_product_quantity_zero():
-    """Тест: количество может быть равно нулю (товар закончился)."""
-    product = Product("Планшет", "Старый планшет", 15000.00, 0)
-    assert product.quantity == 0
+    """Создание товара с нулевым остатком"""
+    with pytest.raises(ValueError) as e:
+        Product("Планшет", "Старый планшет", 15000.0, 0)
+    assert str(e.value) == "Товар с нулевым количеством не может быть добавлен"
 
 
 def test_price_getter(sample_product):
@@ -91,11 +91,12 @@ def test_product_str_format(sample_product):
     assert result == expected
 
 
-def test_product_str_zero_quantity():
-    """Проверяет __str__ при нулевом количестве."""
-    product = Product("Распродан", "Товар закончился", 5000.0, 0)
+def test_product_str_after_quantity_change():
+    """Проверяет __str__ после изменения количества на ноль."""
+    product = Product("Смартфон", "Современный смартфон", 5000.0, 1)
+    product.quantity = 0  # изменяем количество на ноль после создания
     result = str(product)
-    expected = "Распродан, 5000.0 руб. Остаток: 0 шт."
+    expected = "Смартфон, 5000.0 руб. Остаток: 0 шт."
     assert result == expected
 
 
@@ -108,10 +109,14 @@ def test_product_addition_basic():
     assert result == expected
 
 
-def test_addition_zero_quantity():
-    """Тест сложения с продуктом с нулевым количеством."""
-    product_a = Product("Товар A", "Описание", 100, 0)
+def test_addition_after_quantity_change():
+    """Тест сложения после изменения количества на ноль."""
+    product_a = Product("Товар A", "Описание", 100, 1)
     product_b = Product("Товар B", "Описание", 50, 4)
+
+    # Изменяем количество после создания
+    product_a.quantity = 0
+
     result = product_a + product_b
     expected = 0 + 50 * 4  # 200
     assert result == expected
@@ -145,3 +150,16 @@ def test_addition_different_classes():
 
     with pytest.raises(TypeError, match="Нельзя сложить Smartphone с LawnGrass"):
         phone + grass
+
+
+def test_product_raises_valueerror():
+    with pytest.raises(ValueError) as e:
+        Product("Тест-товар", "Описание", 100.0, 0)
+    assert str(e.value) == "Товар с нулевым количеством не может быть добавлен"
+
+
+def test_product_negative_raises_valueerror():
+    """Создание товара с отрицательным количеством вызывает ValueError."""
+    with pytest.raises(ValueError) as e:
+        Product("Тест-товар", "Описание", 100.0, -5)
+    assert str(e.value) == "Товар с нулевым количеством не может быть добавлен"

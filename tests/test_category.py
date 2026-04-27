@@ -26,6 +26,11 @@ def category_with_products(sample_product):
     return Category("Электроника", "Электронные товары", products)
 
 
+@pytest.fixture
+def empty_category():
+    return Category("Пустая категория", "Нет товаров", [])
+
+
 def test_category_initialization(category_with_products, sample_product):
     assert category_with_products.name == "Электроника"
     assert category_with_products.description == "Электронные товары"
@@ -54,13 +59,12 @@ def test_empty_category():
     assert Category.category_count >= 1
 
 
-##
-def test_add_product():
+def test_add_product(reset_category_counters):
     category = Category("Электроника", "Техника")
     product = Product("Наушники", "Беспроводные", 5000, 15)
     category.add_product(product)
-    assert len(category._Category__products) == 1
-    assert Category.product_count == 1  # было 2, стало 3
+    assert len(category.get_products_list()) == 1
+    assert Category.product_count == 1
 
 
 def test_products_getter_format(category_with_products):
@@ -112,3 +116,22 @@ def test_add_invalid_object_to_category():
     category = Category("Ошибки", "Тестовая категория")
     with pytest.raises(TypeError, match="Можно добавлять только объекты класса Product"):
         category.add_product("не продукт")
+
+
+def test_average_price_empty_category(empty_category):
+    """Тест: средний ценник в пустой категории равен 0."""
+    assert empty_category.average_price() == 0.0
+
+
+def test_average_price_with_products(category_with_products):
+    """Расчёт среднего ценника для категории с товарами."""
+    # (29 999,99 + 59 999,99) / 2 = 44 999,99
+    expected = (29999.99 + 59999.99) / 2
+    assert category_with_products.average_price() == pytest.approx(expected, rel=1e-2)
+
+
+def test_average_price_single_product():
+    """Средний ценник для категории с одним товаром."""
+    product = Product("Один товар", "Описание", 10000.0, 5)
+    category = Category("Одиночный товар", "Один продукт", [product])
+    assert category.average_price() == 10000.0
