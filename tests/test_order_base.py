@@ -1,5 +1,6 @@
 import pytest
-from src.order_base import OrderBase, Order
+
+from src.order_base import Order, OrderBase
 from src.product import Product
 
 

@@ -1,6 +1,7 @@
 from typing import List, Optional
-from src.product import Product
+
 from src.exceptions import ZeroQuantityError
+from src.product import Product
 
 
 class Category:

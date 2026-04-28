@@ -1,7 +1,8 @@
 import pytest
+
 from src.category import Category
-from src.product import Product
 from src.iterator import CategoryIterator
+from src.product import Product
 
 
 def test_iterator_basic():

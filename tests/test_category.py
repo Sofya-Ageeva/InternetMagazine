@@ -1,8 +1,9 @@
 import pytest
+
 from src.category import Category
+from src.lawngrass import LawnGrass
 from src.product import Product
 from src.smartphone import Smartphone
-from src.lawngrass import LawnGrass
 
 
 @pytest.fixture(autouse=True)
@@ -123,7 +124,7 @@ def test_average_price_empty_category(empty_category):
     assert empty_category.middle_price() == 0.0
 
 
-def test_average_price_with_products(category_with_products):
+def test_average_price_with_productgis(category_with_products):
     """Расчёт среднего ценника для категории с товарами."""
     # (29 999,99 + 59 999,99) / 2 = 44 999,99
     expected = (29999.99 + 59999.99) / 2
